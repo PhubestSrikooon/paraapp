@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:paraapp/elements/camera_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:paraapp/pages/result_screen.dart';
+import 'package:paraapp/pages/setting_screen.dart';
 
 class main_screen extends StatefulWidget {
   const main_screen({super.key});
@@ -109,7 +110,12 @@ Drawer _drawer(BuildContext context) {
       ListTile(
         leading: Icon(Icons.settings),
         title: Text("Setting"),
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SettingPage(context: context)));
+        },
       ),
       ListTile(
         leading: Icon(Icons.help),
