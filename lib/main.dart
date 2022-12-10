@@ -109,12 +109,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 setState(() {
                   _imageFile = value;
                 }),
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DisplayPictureScreen(
-                              imageFile: _imageFile,
-                            )))
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => DisplayPictureScreen(
+                //               imageFile: _imageFile,
+                //             )))
+                queryResult(context, _imageFile)
               })
           .catchError((onError) => {print(onError)});
     }
@@ -187,6 +188,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                                   icon: _isFlashOn
                                       ? const Icon(Icons.flash_on)
                                       : const Icon(Icons.flash_off)),
+                              IconButton(
+                                  color: Colors.white,
+                                  onPressed: () {},
+                                  icon: Icon(Icons.image))
                             ],
                           ),
                         ),

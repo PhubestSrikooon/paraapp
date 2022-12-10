@@ -1,17 +1,23 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-Future<void> queryResult(BuildContext context) async {
+Future<void> queryResult(BuildContext context, XFile file) async {
   showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(32), topRight: Radius.circular(32))),
       isScrollControlled: true,
-      builder: (context) => bottomModalSheet());
+      builder: (context) => bottomModalSheet(
+            imagePath: file,
+          ));
 }
 
 class bottomModalSheet extends StatefulWidget {
-  const bottomModalSheet({super.key});
+  final imagePath;
+  const bottomModalSheet({super.key, this.imagePath});
 
   @override
   State<bottomModalSheet> createState() => _bottomModalSheetState();
@@ -72,7 +78,9 @@ class _bottomModalSheetState extends State<bottomModalSheet> {
             ),
             Padding(
               padding: EdgeInsets.all(8),
-              child: dataColumn(),
+              child: dataColumn(
+                imagePath: widget.imagePath,
+              ),
             )
           ],
         )));
@@ -80,7 +88,8 @@ class _bottomModalSheetState extends State<bottomModalSheet> {
 }
 
 class dataColumn extends StatefulWidget {
-  const dataColumn({super.key});
+  final imagePath;
+  const dataColumn({super.key, this.imagePath});
 
   @override
   State<dataColumn> createState() => _dataColumnState();
@@ -98,6 +107,10 @@ class _dataColumnState extends State<dataColumn> {
         Text(
           "Description",
           style: Theme.of(context).textTheme.labelMedium,
+        ),
+        Image.file(
+          File(widget.imagePath.path),
+          width: MediaQuery.of(context).size.width,
         )
       ],
     );
