@@ -1,9 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:paraapp/elements/camera_widget.dart';
+import 'package:paraapp/pages/about_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:paraapp/pages/result_screen.dart';
-import 'package:paraapp/pages/setting_screen.dart';
+import 'package:paraapp/pages/about_screen.dart';
 
 class main_screen extends StatefulWidget {
   const main_screen({super.key});
@@ -74,12 +75,7 @@ class _main_screenState extends State<main_screen> {
                             color: Colors.white,
                             icon: flashlight.value
                                 ? const Icon(Icons.flash_on)
-                                : const Icon(Icons.flash_off)),
-                        ElevatedButton(
-                            onPressed: () {
-                              null;
-                            },
-                            child: const Text('HiX'))
+                                : const Icon(Icons.flash_off))
                       ],
                     ),
                   ),
@@ -108,16 +104,6 @@ Drawer _drawer(BuildContext context) {
       child: ListView(
     children: [
       ListTile(
-        leading: Icon(Icons.settings),
-        title: Text("Setting"),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => SettingPage(context: context)));
-        },
-      ),
-      ListTile(
         leading: Icon(Icons.help),
         title: Text("Help"),
         onTap: () {},
@@ -125,7 +111,10 @@ Drawer _drawer(BuildContext context) {
       ListTile(
         leading: Icon(Icons.info),
         title: Text("About"),
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AboutPage()));
+        },
       )
     ],
   ));
