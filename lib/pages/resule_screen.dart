@@ -111,6 +111,7 @@ class _dataColumnState extends State<dataColumn> {
         Image.file(
           File(widget.imagePath.path),
           width: MediaQuery.of(context).size.width,
+          height: double.infinity,
         )
       ],
     );
