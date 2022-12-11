@@ -115,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 //         builder: (context) => DisplayPictureScreen(
                 //               imageFile: _imageFile,
                 //             )))
+
                 queryResult(context, _imageFile)
               })
           .catchError((onError) => {print(onError)});
