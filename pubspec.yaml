@@ -40,7 +40,8 @@ dependencies:
   path_provider: any
   path: any
   gallery_saver: any
-  # tflite: ^1.1.2
+  tflite: ^1.1.2
+  http: any
 
 dev_dependencies:
   flutter_test:

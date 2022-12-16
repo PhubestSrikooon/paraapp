@@ -1,8 +1,12 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:paraapp2/elements/classification.dart';
 import 'package:paraapp2/theme_provider.dart';
 import 'package:paraapp2/pages/display_picture_screen.dart';
 import 'package:paraapp2/pages/resule_screen.dart';
+
+import 'package:paraapp2/elements/requesrdata.dart';
+import 'package:path/path.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,12 +45,22 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isFlashOn = false;
   bool _isProcesss = false;
+  bool _isModelReady = false;
+
+  final Classification _classification = Classification();
+  final RequestData _requestData =
+      RequestData("https://para-classif-server.onrender.com");
 
   @override
   void initState() {
     super.initState();
     initCamera();
     WidgetsBinding.instance.addObserver(this);
+    _classification.loadModel().then((value) {
+      setState(() {
+        _isModelReady = true;
+      });
+    });
   }
 
   @override
@@ -95,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  captureImage(BuildContext context) async {
+  captureImageAndDoBackEnd(BuildContext context) async {
     if (_isProcesss) {
       return;
     } else {
@@ -105,18 +119,39 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       });
       await _cameraController
           .takePicture()
-          .then((value) => {
+          .then((value) async => {
                 setState(() {
                   _imageFile = value;
                 }),
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => DisplayPictureScreen(
-                //               imageFile: _imageFile,
-                //             )))
-
-                queryResult(context, _imageFile)
+                if (_isModelReady)
+                  {
+                    await _classification
+                        .classifyImage(_imageFile)
+                        .then((value) async {
+                      debugPrint(value.toString());
+                      await _requestData
+                          .paraName(value[0]['label'].toString())
+                          ?.then((body) {
+                        if (body == null) {
+                          // show error popup
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Error: Server error occured"),
+                            ),
+                          );
+                        } else if (body == 404) {
+                          // show error popup
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                "Error: ไม่พบข้อมูลหรือไม่สามารถติดต่อได้"),
+                          ));
+                        } else {
+                          queryResult(context, _imageFile, body);
+                        }
+                      });
+                    })
+                  }
               })
           .catchError((onError) => {print(onError)});
     }
@@ -137,12 +172,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     return Transform.scale(
       // make camera preview fit the screen
       scale: scale,
-      child: Center(
-        child: AspectRatio(
-          aspectRatio: _cameraController.value.aspectRatio,
-          child: CameraPreview(_cameraController),
-        ),
-      ),
+      child: Center(child: CameraPreview(_cameraController)),
     );
   }
 
@@ -221,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             Padding(padding: EdgeInsets.all(4)),
                             RawMaterialButton(
                               onPressed: () async {
-                                await captureImage(context);
+                                await captureImageAndDoBackEnd(context);
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,

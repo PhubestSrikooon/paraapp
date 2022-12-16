@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-Future<void> queryResult(BuildContext context, XFile file) async {
+Future<void> queryResult(BuildContext context, XFile file, dynamic body) async {
   showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -12,12 +12,14 @@ Future<void> queryResult(BuildContext context, XFile file) async {
       isScrollControlled: true,
       builder: (context) => bottomModalSheet(
             imagePath: file,
+            body: body,
           ));
 }
 
 class bottomModalSheet extends StatefulWidget {
   final imagePath;
-  const bottomModalSheet({super.key, this.imagePath});
+  final body;
+  const bottomModalSheet({super.key, this.imagePath, this.body});
 
   @override
   State<bottomModalSheet> createState() => _bottomModalSheetState();
@@ -76,12 +78,14 @@ class _bottomModalSheetState extends State<bottomModalSheet> {
                 ],
               ),
             ),
-            Padding(
+            Expanded(
+                child: Padding(
               padding: EdgeInsets.all(8),
               child: dataColumn(
                 imagePath: widget.imagePath,
+                body: widget.body,
               ),
-            )
+            ))
           ],
         )));
   }
@@ -89,30 +93,310 @@ class _bottomModalSheetState extends State<bottomModalSheet> {
 
 class dataColumn extends StatefulWidget {
   final imagePath;
-  const dataColumn({super.key, this.imagePath});
+  final body;
+  const dataColumn({super.key, this.imagePath, this.body});
 
   @override
   State<dataColumn> createState() => _dataColumnState();
 }
 
 class _dataColumnState extends State<dataColumn> {
+  String? thainame;
+  String? breeder;
+  String? origin;
+  dynamic growth;
+  dynamic branch_and_leaf;
+  dynamic bark;
+
+  bool isNull = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.body == null) {
+      isNull = true;
+    } else {
+      thainame = widget.body['general']['ชื่อไทย'];
+      breeder = widget.body['general']['พ่อพันธุ์ x แม่พันธุ์'];
+      origin = widget.body['general']['แหล่งที่มา'];
+      growth = widget.body['growth'];
+      branch_and_leaf = widget.body['branch-and-leaf'];
+      bark = widget.body['bark'];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          "RRT406",
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        Text(
-          "Description",
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
-        Image.file(
-          File(widget.imagePath.path),
-          width: MediaQuery.of(context).size.width,
-        )
-      ],
+    return ListView(
+      padding: EdgeInsets.all(16),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      children: isNull
+          ? <Widget>[Text('ไม่พบข้อมูล')]
+          : <Widget>[
+              Text(
+                thainame.toString(),
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Text(
+                "Descrption",
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              // Image(image: FileImage(File(widget.imagePath.path))),
+              ParagraphChip(
+                title: "ชื่อไทย",
+                child: Text(thainame.toString()),
+              ),
+              ParagraphChip(
+                title: "พ่อพันธุ์ \nx\nแม่พันธุ์",
+                child: Text(
+                  breeder.toString(),
+                ),
+              ),
+              ParagraphChip(
+                title: "แหล่งที่มา",
+                child: Text(
+                  origin.toString(),
+                ),
+              ),
+              ParagraphChip(
+                title: 'การเจริญเติบโต',
+                child: Column(children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "การเจริญเติบโตก่อนเปิดกรีด",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              growth['การเจริญเติบโตก่อนเปิดกรีด'].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "การเจริญเติบโตระหว่างกรีด",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              growth['การเจริญเติบโตระหว่างกรีด'].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ความสม่ำเสมอของขนาดลำต้นทั้งแปลง",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              growth['ความสม่ำเสมอของขนาดลำต้นทั้งแปลง']
+                                  .toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                ]),
+              ),
+              ParagraphChip(
+                  title: "กิ่งและก้าน",
+                  child: Column(
+                    children: [
+                      ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(8),
+                          children: [
+                            // make text การแตกกิ่ง align left of container
+                            Text(
+                              "การแตกกิ่ง",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              branch_and_leaf['การแตกกิ่ง'].toString(),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ]),
+                      ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(8),
+                          children: [
+                            // make text การแตกกิ่ง align left of container
+                            Text(
+                              "ทรงพุ่ม",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              branch_and_leaf['ทรงพุ่ม'].toString(),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ]),
+                      ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(8),
+                          children: [
+                            // make text การแตกกิ่ง align left of container
+                            Text(
+                              "ขนาดทรงพุ่ม",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              branch_and_leaf['ขนาดทรงพุ่ม'].toString(),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ]),
+                      ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(8),
+                          children: [
+                            // make text การแตกกิ่ง align left of container
+                            Text(
+                              "ความทึบของพุ่ม",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              branch_and_leaf['ความทึบของพุ่ม'].toString(),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ]),
+                      ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(8),
+                          children: [
+                            // make text การแตกกิ่ง align left of container
+                            Text(
+                              "ความเร็วในการผลัดใบ",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              branch_and_leaf['ความเร็วในการผลัดใบ'].toString(),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ]),
+                    ],
+                  )),
+              ParagraphChip(
+                  title: "เปลือก",
+                  child: Column(
+                    children: [
+                      ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(8),
+                          children: [
+                            // make text การแตกกิ่ง align left of container
+                            Text(
+                              "ความหนาเปลือกเดิม",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              bark['ความหนาเปลือกเดิม'].toString(),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ]),
+                      ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(8),
+                          children: [
+                            // make text การแตกกิ่ง align left of container
+                            Text(
+                              "ความหนาเปลือกงอกใหม่",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              bark['ความหนาเปลือกงอกใหม่'].toString(),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ]),
+                    ],
+                  )),
+            ],
     );
+  }
+}
+
+class ParagraphChip extends StatelessWidget {
+  final String title;
+  final Widget child;
+  const ParagraphChip({super.key, required this.title, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(top: 8, bottom: 8),
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  width: 1.5, color: Theme.of(context).colorScheme.primary),
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(12)),
+          padding: EdgeInsets.all(16),
+          child: Row(children: [
+            Expanded(
+              flex: 1,
+              child: Text(title.toString(),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold)),
+            ),
+            Expanded(flex: 3, child: child),
+          ]),
+        ));
   }
 }
