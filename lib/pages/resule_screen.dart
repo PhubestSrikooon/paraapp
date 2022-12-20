@@ -107,6 +107,11 @@ class _dataColumnState extends State<dataColumn> {
   dynamic growth;
   dynamic branch_and_leaf;
   dynamic bark;
+  dynamic rubber_tapping_system;
+  dynamic product;
+  dynamic disease;
+  dynamic conditions;
+  dynamic note;
 
   bool isNull = false;
 
@@ -123,6 +128,11 @@ class _dataColumnState extends State<dataColumn> {
       growth = widget.body['growth'];
       branch_and_leaf = widget.body['branch-and-leaf'];
       bark = widget.body['bark'];
+      rubber_tapping_system = widget.body['rubber-tapping-system'];
+      product = widget.body['product'];
+      disease = widget.body['disease'];
+      conditions = widget.body['conditions'];
+      note = widget.body['note'];
     }
   }
 
@@ -366,6 +376,281 @@ class _dataColumnState extends State<dataColumn> {
                           ]),
                     ],
                   )),
+              ParagraphChip(
+                title: "ระบบกรีด",
+                child: Text(rubber_tapping_system['ระบบกรีด'].toString()),
+              ),
+              ParagraphChip(
+                title: "ผลผลิตต่อไร่",
+                child: Text(product['ผลผลิตต่อไร่'].toString()),
+              ),
+              ParagraphChip(
+                title: 'การต้านทานโรค',
+                child: Column(children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ใบร่วงไฟทอฟธอรา",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              disease["ใบร่วงไฟทอฟธอรา"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ราแป้ง",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              disease["ราแป้ง"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ใบจุดคอลเลโทตริกัม",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              disease["ใบจุดคอลเลโทตริกัม"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ใบจุดก้างปลา",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              disease["ใบจุดก้างปลา"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "เส้นดำ",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              disease["เส้นดำ"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ราสีชมพู",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              disease["ราสีชมพู"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                ]),
+              ),
+              ParagraphChip(
+                title: 'ความต้านทานตามสภาพแวดล้อม',
+                child: Column(children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "อาการเปลือกแห้ง",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              conditions["อาการเปลือกแห้ง"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ความต้านทานลม",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              conditions["ความต้านทานลม"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ความลาดชันสูง",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              conditions["ความลาดชันสูง"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ความชื้นในพื้นที่",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              conditions["ความชื้นในพื้นที่"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "ระดับน้ำใต้ดินสูง",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              conditions["ระดับน้ำใต้ดินสูง"].toString(),
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                ]),
+              ),
+              ParagraphChip(
+                title: "ข้อแนะนำอื่น ๆ",
+                child: Text(note['ข้อแนะนำอื่น ๆ'].toString()),
+              ),
             ],
     );
   }
